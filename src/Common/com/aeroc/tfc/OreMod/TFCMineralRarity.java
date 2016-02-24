@@ -1,4 +1,4 @@
-package com.bioxx.tfc.OreMod;
+package com.aeroc.tfc.OreMod;
 
 public class TFCMineralRarity {
 

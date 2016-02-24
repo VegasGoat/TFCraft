@@ -40,6 +40,8 @@ import com.bioxx.tfc.api.Constant.Global;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.aeroc.tfc.OreMod.TFCOreMod;
+
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.MOD_DEPENDENCIES, guiFactory = Reference.GUI_FACTORY)
 public class TerraFirmaCraft
 {
@@ -99,6 +101,9 @@ public class TerraFirmaCraft
 		//Load Items
 		ItemSetup.setup();
 
+		// initialize ore mod
+		TFCOreMod.initOreMod();
+
 		// Register Gui Handler
 		proxy.registerGuiHandler();
 
@@ -108,7 +113,8 @@ public class TerraFirmaCraft
 		GameRegistry.registerWorldGenerator(new WorldGenFissure(TFCBlocks.freshWaterStationary, 2, false, TFCOptions.waterFissureRarity), 0);
 		//Surface Hotsprings
 		GameRegistry.registerWorldGenerator(new WorldGenFissureCluster(), 1);
-		GameRegistry.registerWorldGenerator(new WorldGenOre(), 2);
+		// GameRegistry.registerWorldGenerator(new WorldGenOre(), 2);
+		GameRegistry.registerWorldGenerator(TFCOreMod.oreGenerator, 2);
 		GameRegistry.registerWorldGenerator(new WorldGenCaveDecor(), 3);
 		GameRegistry.registerWorldGenerator(new WorldGenForests(), 4);
 		GameRegistry.registerWorldGenerator(new WorldGenLooseRocks(), 5);

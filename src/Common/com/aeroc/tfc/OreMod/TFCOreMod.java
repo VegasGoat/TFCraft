@@ -1,4 +1,4 @@
-package com.bioxx.tfc.OreMod;
+package com.aeroc.tfc.OreMod;
 
 import net.minecraft.block.Block;
 import com.bioxx.tfc.api.TFCBlocks;
