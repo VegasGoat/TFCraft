@@ -82,14 +82,75 @@ public class TFCOreModWorldGenOre implements IWorldGenerator {
 				int startX = coordX + random.nextInt( 16 );
 				int startZ = coordZ + random.nextInt( 16 );
 				int startY = 0;
+				Block startRock = null;
+				int startMeta = 0;
 
 				for( int i = 255; i > 0 && startY == 0; i-- ){ //Find the highest rock, to complete the start position for veins
-					if( TFCOreModWorldGenOre.isRock( world.getBlock( startX, i, startZ ) ) ){
+					Block checkRock = world.getBlock( startX, i, startZ );
+					if( TFCOreModWorldGenOre.isRock( checkRock ) ){
 						startY = i;
+						startRock = checkRock;
+						startMeta = world.getBlockMetadata( startX, startY, startZ );
 					}
 				}
-				if( mineral.type == TFCMineral.GenerationType.BED ){	//Randomize the height for beds
-					startY = random.nextInt( startY - 10 ) + 10;	//Assign a random y-Level height to the bed (10+)
+				if( mineral.type == TFCMineral.GenerationType.BED ) {
+					// find a matching rock layer (if any) and pick a random height in it
+					int testY;
+					int secondY = -1;
+					Block secondRock = null;
+					int secondMeta = 0;
+					int thirdY = -1;
+					Block thirdRock = null;
+					int thirdMeta = 0;
+
+					// find start of second layer
+					for(testY=startY; testY>10; --testY){
+						Block testRock = world.getBlock( startX, testY, startZ );
+						if( TFCOreModWorldGenOre.isRock( testRock ) ) {
+							int testMeta = world.getBlockMetadata( startX, testY, startZ );
+							if(( testRock != startRock ) && (testMeta != startMeta)) {
+								secondY = testY;
+								secondRock = testRock;
+								secondMeta = testMeta;
+								break;
+							}
+						}
+					}
+
+					// if a second layer was found, find start of third layer
+					if(secondY != -1) {
+						for(testY=secondY; testY>10; --testY){
+							Block testRock = world.getBlock( startX, testY, startZ );
+							if( TFCOreModWorldGenOre.isRock( testRock ) ) {
+								int testMeta = world.getBlockMetadata( startX, testY, startZ );
+								if(( testRock != secondRock ) && (testMeta != secondMeta)) {
+									thirdY = testY;
+									thirdRock = testRock;
+									thirdMeta = testMeta;
+									break;
+								}
+							}
+						}
+					}
+
+					if(mineral.canOccurIn(startRock, startMeta)) {
+						// first layer works, pick a random height in it
+						if(secondY != -1)
+							startY = random.nextInt( startY - secondY ) + secondY + 1;
+						else
+							startY = random.nextInt( startY - 10 ) + 10 + 1;
+					}
+					else if((secondY != -1) && (mineral.canOccurIn(secondRock, secondMeta))) {
+						// second layer works, pick a random height in it
+						if(thirdY != -1)
+							startY = random.nextInt( secondY - thirdY ) + thirdY + 1;
+						else
+							startY = random.nextInt( secondY - 10 ) + 10 + 1;
+					}
+					else if(thirdY != -1) {
+						// pick a random height in the third layer, it'll be checked for a match below
+						startY = random.nextInt( thirdY - 10 ) + 10 + 1;
+					}
 				}
 				if( mineral.type == TFCMineral.GenerationType.PIPE ){ //Special case for kimberlite pipes
 					int gabbroTop = 0;
