@@ -649,9 +649,8 @@ public class TEBarrel extends NetworkTileEntity implements IInventory
 				}
 			}
 
-			//If lightning can strike here then it means that the barrel can see the sky, so rain can hit it. If true then we fill
-			//the barrel when its raining.
-			if(!this.getSealed() && worldObj.canLightningStrikeAt(xCoord, yCoord+1, zCoord))
+			// Fill the barrel when its raining.
+			if (!this.getSealed() && TFC_Core.isExposedToRain(worldObj, xCoord, yCoord, zCoord))
 			{
 				int count = getInvCount();	
 				if (count == 0 || count == 1 && this.getInputStack() != null)
@@ -796,9 +795,11 @@ public class TEBarrel extends NetworkTileEntity implements IInventory
 					}
 					else
 					{
-						this.fluid = recipe.getResultFluid(origIS, origFS, time);
+						this.fluid = recipe.getResultFluid(origIS, origFS, time).copy();
 						if (fluid != null && !(recipe instanceof BarrelLiquidToLiquidRecipe) && origFS != null)
 							this.fluid.amount = origFS.amount;
+
+						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 					}
 
 					if (origFS != null && origFS.getFluid() != TFCFluids.MILKCURDLED && this.fluid.getFluid() == TFCFluids.MILKCURDLED)

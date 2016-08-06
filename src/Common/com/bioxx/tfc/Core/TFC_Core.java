@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGlass;
+import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -39,7 +41,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.bioxx.tfc.TerraFirmaCraft;
-import com.bioxx.tfc.Blocks.BlockSlab;
 import com.bioxx.tfc.Chunkdata.ChunkData;
 import com.bioxx.tfc.Chunkdata.ChunkDataManager;
 import com.bioxx.tfc.Core.Player.BodyTempStats;
@@ -51,7 +52,6 @@ import com.bioxx.tfc.Items.ItemOre;
 import com.bioxx.tfc.Items.ItemTerra;
 import com.bioxx.tfc.Items.ItemBlocks.ItemTerraBlock;
 import com.bioxx.tfc.TileEntities.TEMetalSheet;
-import com.bioxx.tfc.TileEntities.TEPartial;
 import com.bioxx.tfc.WorldGen.TFCBiome;
 import com.bioxx.tfc.api.*;
 import com.bioxx.tfc.api.Constant.Global;
@@ -839,11 +839,6 @@ public class TFC_Core
 	{
 		if(world.getBlock(x, y, z).isNormalCube())
 			return true;
-		else if(world.getBlock(x, y, z) == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			return BlockSlab.getTopChiselLevel(te.extraData) == 0;
-		}
 		else if(world.getBlock(x, y, z) == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -857,11 +852,6 @@ public class TFC_Core
 	{
 		if(world.getBlock(x, y, z).isNormalCube())
 			return true;
-		else if(world.getBlock(x, y, z) == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			return BlockSlab.getBottomChiselLevel(te.extraData) == 0;
-		}
 		else if(world.getBlock(x, y, z) == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -876,11 +866,6 @@ public class TFC_Core
 		Block bid = world.getBlock(x, y, z);
 		if(bid.isNormalCube())
 			return true;
-		else if(bid == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			return BlockSlab.getNorthChiselLevel(te.extraData) == 0;
-		}
 		else if(bid == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -894,11 +879,6 @@ public class TFC_Core
 	{
 		if(world.getBlock(x, y, z).isNormalCube())
 			return true;
-		else if(world.getBlock(x, y, z) == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			return BlockSlab.getSouthChiselLevel(te.extraData) == 0;
-		}
 		else if(world.getBlock(x, y, z) == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -912,12 +892,6 @@ public class TFC_Core
 	{
 		if(world.getBlock(x, y, z).isNormalCube())
 			return true;
-		else if(world.getBlock(x, y, z) == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			if(BlockSlab.getEastChiselLevel(te.extraData) != 0)
-				return true;
-		}
 		else if(world.getBlock(x, y, z) == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -931,11 +905,6 @@ public class TFC_Core
 	{
 		if(world.getBlock(x, y, z).isNormalCube())
 			return true;
-		else if(world.getBlock(x, y, z) == TFCBlocks.stoneSlabs)
-		{
-			TEPartial te = (TEPartial) world.getTileEntity(x, y, z);
-			return BlockSlab.getWestChiselLevel(te.extraData) == 0;
-		}
 		else if(world.getBlock(x, y, z) == TFCBlocks.metalSheet)
 		{
 			TEMetalSheet te = (TEMetalSheet) world.getTileEntity(x, y, z);
@@ -943,6 +912,24 @@ public class TFC_Core
 				return true;
 		}
 		return world.getBlock(x, y, z).isSideSolid(world, x, y, z, ForgeDirection.WEST);
+	}
+
+	public static boolean isSurroundedSolid(World world, int x, int y, int z)
+	{
+		return TFC_Core.isNorthFaceSolid(world, x, y, z + 1) &&
+				TFC_Core.isSouthFaceSolid(world, x, y, z - 1) &&
+				TFC_Core.isEastFaceSolid(world, x - 1, y, z) &&
+				TFC_Core.isWestFaceSolid(world, x + 1, y, z) &&
+				TFC_Core.isTopFaceSolid(world, x, y - 1, z);
+	}
+
+	public static boolean isSurroundedStone(World world, int x, int y, int z)
+	{
+		return world.getBlock(x, y, z + 1).getMaterial() == Material.rock &&
+				world.getBlock(x, y, z - 1).getMaterial() == Material.rock &&
+				world.getBlock(x - 1, y, z).getMaterial() == Material.rock &&
+				world.getBlock(x + 1, y, z).getMaterial() == Material.rock &&
+				world.getBlock(x, y - 1, z).getMaterial() == Material.rock;
 	}
 
 	public static boolean isOreIron(ItemStack is)
@@ -1132,7 +1119,7 @@ public class TFC_Core
 			{
 				if(timeDiff > TFCOptions.decayProtectionDays * 24)
 				{
-					Food.setDecayTimer(is, (int) TFC_Time.getTotalHours() - 24);
+					decayTimer = (int) TFC_Time.getTotalHours() - 24;
 				}
 				else if(timeDiff > 24)
 				{
@@ -1392,5 +1379,24 @@ public class TFC_Core
 	public static long getSuperSeed(World w)
 	{
 		return w.getSeed()+w.getWorldInfo().getNBTTagCompound().getLong("superseed");
+	}
+	
+	public static boolean isExposedToRain(World world, int x, int y, int z)
+	{
+		int highestY = world.getPrecipitationHeight(x, z) - 1;
+		boolean isExposed = true;
+		if (world.canBlockSeeTheSky(x, y + 1, z)) // Either no blocks, or transparent blocks above.
+		{
+			// Glass blocks, or blocks with a solid top or bottom block the rain.
+			if (world.getBlock(x, highestY, z) instanceof BlockGlass
+					|| world.getBlock(x, highestY, z) instanceof BlockStainedGlass
+					|| world.isSideSolid(x, highestY, z, ForgeDirection.UP) 
+					|| world.isSideSolid(x, highestY, z, ForgeDirection.DOWN))
+				isExposed = false;
+		}
+		else // Can't see the sky
+			isExposed = false;
+
+		return world.isRaining() && isExposed;
 	}
 }
