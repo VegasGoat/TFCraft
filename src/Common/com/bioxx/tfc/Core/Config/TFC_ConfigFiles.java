@@ -58,6 +58,7 @@ public class TFC_ConfigFiles
 	public static final String ANVIL_RULE_COLOR0 = "color anvil rule 0";
 	public static final String ANVIL_RULE_COLOR1 = "color anvil rule 1";
 	public static final String ANVIL_RULE_COLOR2 = "color anvil rule 2";
+	public static final String CUSTOM = "custom";
 	// Crafting
 	public static final String CONVERSION = "Conversion";
 	public static final String ENABLE_VANILLA_RECIPES = "Enable Vanilla Recipes";
@@ -459,6 +460,10 @@ public class TFC_ConfigFiles
 		getColor(generalConfig, ANVIL_RULE_COLOR0, anvilRuleColor0, "config.gui.TFCConfig.colors.anvil.0");
 		getColor(generalConfig, ANVIL_RULE_COLOR1, anvilRuleColor1, "config.gui.TFCConfig.colors.anvil.1");
 		getColor(generalConfig, ANVIL_RULE_COLOR2, anvilRuleColor2, "config.gui.TFCConfig.colors.anvil.2");
+
+		// custom options
+		enableOreMod = generalConfig.getBoolean("enableOreMod", CUSTOM, enableOreMod, "Set to true to enable alternate ore generation mode.", "config.gui.TFCConfig.custom.enableOreMod");
+		enableTreeMod = generalConfig.getBoolean("enableTreeMod", CUSTOM, enableTreeMod, "Set to true to enable alternate tree growth mod.", "config.gui.TFCConfig.custom.enableTreeMod");
 
 		//noinspection deprecation
 		Global.foodDecayRate = foodDecayRate; // keep deprecated value up to date

@@ -116,31 +116,45 @@ public class BlockSapling extends BlockTerraContainer
 			TESapling te = (TESapling) world.getTileEntity(i, j, k);
 			if (te != null && te.growTime == 0)
 			{
-				// Aero's code, long tree growth time
-				int numberOfDaysToGrow = TFC_Time.daysInYear;
-				switch( meta )
+				if(TFCOptions.enableTreeMod)
 				{
-					case 0: numberOfDaysToGrow *= 6; break;
-					case 1: numberOfDaysToGrow *= 3; break;
-					case 2: numberOfDaysToGrow *= 5; break;
-					case 3: numberOfDaysToGrow *= 6; break;
-					case 4: numberOfDaysToGrow *= 12; break;
-					case 5: numberOfDaysToGrow *= 9; break;
-					case 6: numberOfDaysToGrow *= 8; break;
-					case 7: numberOfDaysToGrow *= 5; break;
-					case 8: numberOfDaysToGrow *= 4; break;
-					case 9: numberOfDaysToGrow *= 50; break;
-					case 10: numberOfDaysToGrow *= 5; break;
-					case 11: numberOfDaysToGrow *= 7; break;
-					case 12: numberOfDaysToGrow *= 7; break;
-					case 13: numberOfDaysToGrow *= 7; break;
-					case 14: numberOfDaysToGrow *= 10; break;
-					case 15: numberOfDaysToGrow *= 50; break;
+					// Aero's code, long tree growth time
+					int numberOfDaysToGrow = TFC_Time.daysInYear;
+					switch( meta )
+					{
+						case 0: numberOfDaysToGrow *= 6; break;
+						case 1: numberOfDaysToGrow *= 3; break;
+						case 2: numberOfDaysToGrow *= 5; break;
+						case 3: numberOfDaysToGrow *= 6; break;
+						case 4: numberOfDaysToGrow *= 12; break;
+						case 5: numberOfDaysToGrow *= 9; break;
+						case 6: numberOfDaysToGrow *= 8; break;
+						case 7: numberOfDaysToGrow *= 5; break;
+						case 8: numberOfDaysToGrow *= 4; break;
+						case 9: numberOfDaysToGrow *= 50; break;
+						case 10: numberOfDaysToGrow *= 5; break;
+						case 11: numberOfDaysToGrow *= 7; break;
+						case 12: numberOfDaysToGrow *= 7; break;
+						case 13: numberOfDaysToGrow *= 7; break;
+						case 14: numberOfDaysToGrow *= 10; break;
+						case 15: numberOfDaysToGrow *= 50; break;
+					}
+				
+					te.growTime = (long) ((TFC_Time.getTotalTicks() //Time up til now
+						+ (TFC_Time.DAY_LENGTH * numberOfDaysToGrow)) //Number of years
+						+ (world.rand.nextFloat() * TFC_Time.DAY_LENGTH * TFC_Time.daysInMonth )); // Random part of a month
 				}
-			
-				te.growTime = (long) ((TFC_Time.getTotalTicks() //Time up til now
-					+ (TFC_Time.DAY_LENGTH * numberOfDaysToGrow)) //Number of years
-					+ (world.rand.nextFloat() * TFC_Time.DAY_LENGTH * TFC_Time.daysInMonth )); // Random part of a month
+				else
+				{
+					float growSpeed = 1;
+					if(meta == 1 || meta == 11)
+						growSpeed = 1.2f;
+					else if(meta == 5 || meta == 0 || meta == 13)
+						growSpeed = 1.4f;
+					else if(meta == 9 || meta == 14|| meta == 15)
+						growSpeed = 1.6f;
+					te.growTime = (long) (TFC_Time.getTotalTicks() + (TFC_Time.DAY_LENGTH * 7 * growSpeed * TFCOptions.saplingTimerMultiplier) + (world.rand.nextFloat() * TFC_Time.DAY_LENGTH));
+				}
 			}
 		}
 	}

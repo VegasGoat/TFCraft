@@ -102,7 +102,10 @@ public class TerraFirmaCraft
 		ItemSetup.setup();
 
 		// initialize ore mod
-		TFCOreMod.initOreMod();
+		if(TFCOptions.enableOreMod)
+		{
+			TFCOreMod.initOreMod();
+		}
 
 		// Register Gui Handler
 		proxy.registerGuiHandler();
@@ -113,8 +116,14 @@ public class TerraFirmaCraft
 		GameRegistry.registerWorldGenerator(new WorldGenFissure(TFCBlocks.freshWaterStationary, 2, false, TFCOptions.waterFissureRarity), 0);
 		//Surface Hotsprings
 		GameRegistry.registerWorldGenerator(new WorldGenFissureCluster(), 1);
-		// GameRegistry.registerWorldGenerator(new WorldGenOre(), 2);
-		GameRegistry.registerWorldGenerator(TFCOreMod.oreGenerator, 2);
+		if(TFCOptions.enableOreMod)
+		{
+			GameRegistry.registerWorldGenerator(TFCOreMod.oreGenerator, 2);
+		}
+		else
+		{
+			GameRegistry.registerWorldGenerator(new WorldGenOre(), 2);
+		}
 		GameRegistry.registerWorldGenerator(new WorldGenCaveDecor(), 3);
 		GameRegistry.registerWorldGenerator(new WorldGenForests(), 4);
 		GameRegistry.registerWorldGenerator(new WorldGenLooseRocks(), 5);

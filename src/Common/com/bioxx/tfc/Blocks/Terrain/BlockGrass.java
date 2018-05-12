@@ -220,9 +220,8 @@ public class BlockGrass extends BlockTerra
 				{
 					if(rand.nextInt((int) ((16800-rain)/4)) == 0 && temp > 20)
 						world.setBlock(i, j + 1, k, TFCBlocks.tallGrass, (world.rand.nextInt(30) == 0 ? 1 : 0), 0x2); // 1/30 chance to spawn fern
-					// no random sapling growth
-					// else if (rand.nextInt(15000) == 0 && temp > 20)
-					// new WorldGenSaplings().generate(world, rand, i, j, k);
+					else if (!TFCOptions.enableTreeMod && rand.nextInt(15000) == 0 && temp > 20)
+						new WorldGenSaplings().generate(world, rand, i, j, k);
 				}
 
 				boolean nearWater = false;
