@@ -21,6 +21,7 @@ import com.bioxx.tfc.Core.TFC_Time;
 import com.bioxx.tfc.Entities.AI.AIEatGrass;
 import com.bioxx.tfc.Entities.AI.EntityAIAvoidEntityTFC;
 import com.bioxx.tfc.Entities.AI.EntityAIMateTFC;
+import com.bioxx.tfc.Entities.AI.EntityAIWanderNoFence;
 import com.bioxx.tfc.Food.ItemFoodTFC;
 import com.bioxx.tfc.Items.ItemCustomNameTag;
 import com.bioxx.tfc.Items.Tools.ItemCustomBucketMilk;
@@ -89,6 +90,8 @@ public class EntityCowTFC extends EntityCow implements IAnimal
 		this.tasks.addTask(3, new EntityAITempt(this, 1.2F, TFCItems.maizeEar, false));
 		this.tasks.addTask(3, new EntityAIAvoidEntityTFC(this, EntityWolfTFC.class, 8f, 0.5F, 0.7F));
 		this.tasks.addTask(6, this.aiEatGrass);
+
+		EntityAIWanderNoFence.replaceVanillaWander(this, 1.0D);
 
 		/*
 		 * We hijack the growingAge to hold the day of birth rather than the number of ticks to the next growth event.

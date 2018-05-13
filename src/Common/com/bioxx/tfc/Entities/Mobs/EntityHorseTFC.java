@@ -34,6 +34,7 @@ import com.bioxx.tfc.Entities.AI.AIEatGrass;
 import com.bioxx.tfc.Entities.AI.EntityAIAvoidEntityTFC;
 import com.bioxx.tfc.Entities.AI.EntityAIMateTFC;
 import com.bioxx.tfc.Entities.AI.EntityAIPanicTFC;
+import com.bioxx.tfc.Entities.AI.EntityAIWanderNoFence;
 import com.bioxx.tfc.Food.ItemFoodTFC;
 import com.bioxx.tfc.Items.ItemCustomNameTag;
 import com.bioxx.tfc.api.TFCBlocks;
@@ -104,7 +105,7 @@ public class EntityHorseTFC extends EntityHorse implements IInvBasic, IAnimal
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIRunAroundLikeCrazy(this, 1.2D));
 		this.tasks.addTask(4, new EntityAIFollowParent(this, 1.0D));
-		this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
+		this.tasks.addTask(6, new EntityAIWanderNoFence(this, 0.7D));
 		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.tasks.addTask(2, new EntityAIMateTFC(this,this.worldObj, 1.0F));

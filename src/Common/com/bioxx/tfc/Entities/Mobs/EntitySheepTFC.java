@@ -28,6 +28,7 @@ import com.bioxx.tfc.Core.TFC_Time;
 import com.bioxx.tfc.Entities.AI.AIEatGrass;
 import com.bioxx.tfc.Entities.AI.EntityAIAvoidEntityTFC;
 import com.bioxx.tfc.Entities.AI.EntityAIMateTFC;
+import com.bioxx.tfc.Entities.AI.EntityAIWanderNoFence;
 import com.bioxx.tfc.Food.ItemFoodTFC;
 import com.bioxx.tfc.Items.ItemCustomNameTag;
 import com.bioxx.tfc.Items.Tools.ItemKnife;
@@ -104,6 +105,8 @@ public class EntitySheepTFC extends EntitySheep implements IShearable, IAnimal
 		this.tasks.addTask(3, new EntityAIAvoidEntityTFC(this, EntityWolfTFC.class, 8f, 0.5F, 0.7F));
 		this.tasks.addTask(3, new EntityAIAvoidEntityTFC(this, EntityBear.class, 16f, 0.25F, 0.3F));
 		this.tasks.addTask(6, this.aiEatGrass);
+
+		EntityAIWanderNoFence.replaceVanillaWander(this, 1.0D);
 
 		this.colorCrafting.setInventorySlotContents(0, new ItemStack(Items.dye, 1, 0));
 		this.colorCrafting.setInventorySlotContents(1, new ItemStack(Items.dye, 1, 0));
